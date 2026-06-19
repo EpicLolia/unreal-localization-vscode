@@ -1,4 +1,5 @@
 dist
 node_modules
+unreal-localization-*.vsix
 
 .claude/settings.local.json
