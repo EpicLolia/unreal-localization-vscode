@@ -1,0 +1,43 @@
+{
+  "name": "unreal-localization",
+  "displayName": "Unreal Localization for VS Code",
+  "description": "Unreal Localization for VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.103.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "unreal-localization.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json",
+    "watch:check": "tsc --noEmit --watch -p tsconfig.json",
+    "build": "npm run check && node esbuild.js",
+    "watch:build": "node esbuild.js --watch",
+    "package": "npm run check && node esbuild.js --production"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@eslint/json": "^1.2.0",
+    "@types/node": "^20.19.43",
+    "@types/vscode": "^1.103.0",
+    "esbuild": "^0.28.1",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.6.0",
+    "prettier": "3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
+  }
+}

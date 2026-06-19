@@ -1,0 +1,43 @@
+{
+  "folders": [
+    {
+      "name": "unreal-localization",
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "files.eol": "\n",
+    "files.exclude": {
+      "node_modules/": true,
+      "package-lock.json": true,
+    },
+
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+    },
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Run Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "args": ["--extensionDevelopmentPath=${workspaceFolder:unreal-localization}"],
+        "outFiles": ["${workspaceFolder:unreal-localization}/dist/**/*.js"]
+      },
+    ],
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build",
+        "type": "npm",
+        "script": "build",
+        "group": { "kind": "build", "isDefault": true },
+      },
+    ],
+  },
+}
