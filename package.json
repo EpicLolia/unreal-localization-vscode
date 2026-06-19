@@ -9,17 +9,18 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./dist/extension.js",
+  "publisher": "loiafeng",
+  "repository": {
+    "url": "https://github.com/EpicLolia/unreal-localization-vscode"
+  },
   "files": [
     "dist/extension.js",
     "LICENSE"
   ],
-  "repository": {
-    "url": "https://github.com/EpicLolia/unreal-localization-vscode"
-  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "commands": [
       {
