@@ -1,7 +1,6 @@
 {
   "permissions": {
     "defaultMode": "acceptEdits",
-    "deny": ["Agent(Plan)", "Agent(Explore)", "Agent(explore)"],
     "allow": ["Bash(git status*)", "Bash(git diff*)", "Bash(git log*)", "Bash(git add*)", "Bash(git commit*)", "Bash(git push*)"]
   },
   "hooks": {
