@@ -132,8 +132,8 @@ export function parseLocres(filePath: string): LocresFile {
     for (let k = 0; k < keyCount; k++) {
       if (version >= Version.Optimized_CRC32) r.u32(); // key hash
       const key = r.fstring();
-      r.u32(); // source string hash
       if (version >= Version.Compact) {
+        r.u32(); // source string hash (v1+ only)
         const idx = r.i32();
         entries[key] = idx >= 0 && idx < strings.length ? strings[idx] : '';
       } else {

@@ -9,42 +9,28 @@ export function registerCompletion(matcher: PatternMatcher, store: LocresStore):
       if (!hit) return undefined;
 
       if (hit.slot === 'ns') {
-        const items: vscode.CompletionItem[] = [];
-        for (const ns of store.listNamespaces()) {
+        return store.listNamespaces().map((ns) => {
           const item = new vscode.CompletionItem(ns, vscode.CompletionItemKind.Module);
-          item.detail = `${store.keyCount(ns)} keys`;
+          item.detail = `${store.listKeys(ns).length} keys`;
           item.range = hit.match.nsRange;
-          items.push(item);
-        }
-        return items;
+          return item;
+        });
       }
 
-      if (hit.slot === 'key') {
-        if (!store.hasNamespace(hit.match.ns)) return undefined;
-        const items: vscode.CompletionItem[] = [];
-        for (const key of store.listKeys(hit.match.ns)) {
-          const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Field);
+      if (hit.slot === 'key' && store.hasNamespace(hit.match.ns)) {
+        return store.listKeys(hit.match.ns).map((key) => {
           const value = store.getTranslation(hit.match.ns, key) ?? '';
-          item.detail = previewLine(value);
-          if (value) {
-            const md = new vscode.MarkdownString();
-            md.appendCodeblock(value, 'plaintext');
-            item.documentation = md;
-          }
+          const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Field);
+          item.detail = value.replace(/\s+/g, ' ').trim();
+          if (value) item.documentation = new vscode.MarkdownString().appendCodeblock(value, 'plaintext');
           item.range = hit.match.keyRange;
-          items.push(item);
-        }
-        return items;
+          return item;
+        });
       }
 
       return undefined;
     },
   };
 
-  return vscode.languages.registerCompletionItemProvider(matcher.combinedSelector(), provider, '"', "'", ',');
-}
-
-function previewLine(s: string): string {
-  const oneLine = s.replace(/\s+/g, ' ').trim();
-  return oneLine.length > 100 ? oneLine.slice(0, 99) + '…' : oneLine;
+  return vscode.languages.registerCompletionItemProvider({ scheme: 'file' }, provider, '"', "'");
 }

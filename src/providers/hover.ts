@@ -4,19 +4,19 @@ import { LocresStore } from '../store';
 import { PatternMatcher } from '../matcher';
 
 export function registerHover(matcher: PatternMatcher, store: LocresStore): vscode.Disposable {
-  const provider: vscode.HoverProvider = {
-    provideHover(doc, pos) {
-      const hit = matcher.findAtPosition(doc, pos);
-      if (!hit) return undefined;
-      const { ns, key } = hit.match;
-      if (!store.hasKey(ns, key)) return undefined;
-      const value = store.getTranslation(ns, key) ?? '';
-      const culture = getConfig().defaultCulture;
-      const md = new vscode.MarkdownString();
-      md.appendMarkdown(`**\`${ns}\` ▸ \`${key}\`** _(${culture})_\n\n`);
-      md.appendCodeblock(value, 'plaintext');
-      return new vscode.Hover(md, hit.match.fullRange);
+  return vscode.languages.registerHoverProvider(
+    { scheme: 'file' },
+    {
+      provideHover(doc, pos) {
+        const hit = matcher.findAtPosition(doc, pos);
+        if (!hit || !store.hasKey(hit.match.ns, hit.match.key)) return undefined;
+        const { ns, key } = hit.match;
+        const value = store.getTranslation(ns, key) ?? '';
+        const md = new vscode.MarkdownString()
+          .appendMarkdown(`**\`${ns}\` ▸ \`${key}\`** _(${getConfig().defaultCulture})_\n\n`)
+          .appendCodeblock(value, 'plaintext');
+        return new vscode.Hover(md, hit.match.fullRange);
+      },
     },
-  };
-  return vscode.languages.registerHoverProvider(matcher.combinedSelector(), provider);
+  );
 }
