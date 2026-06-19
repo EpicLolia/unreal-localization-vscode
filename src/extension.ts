@@ -1,27 +1,60 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { getConfig, onDidChangeConfig } from './config';
+import { LocresStore } from './store';
+import { PatternMatcher } from './matcher';
+import { registerCompletion } from './providers/completion';
+import { registerHover } from './providers/hover';
+import { DiagnosticsManager } from './providers/diagnostics';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "unreal-localization" is now active!');
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  const disposable = vscode.commands.registerCommand('unreal-localization.helloWorld', () => {
-    // The code you place here will be executed every time your command is executed
-    // Display a message box to the user
-    vscode.window.showInformationMessage('Hello World from Unreal Localization for VS Code!');
-  });
-
-  context.subscriptions.push(disposable);
+interface ProviderHandles {
+  completion: vscode.Disposable;
+  hover: vscode.Disposable;
+  diagnostics: DiagnosticsManager;
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {
-  // pass
+export function activate(context: vscode.ExtensionContext): void {
+  const store = new LocresStore();
+  const matcher = new PatternMatcher();
+
+  let providers: ProviderHandles | undefined;
+
+  const setupProviders = (): void => {
+    providers?.completion.dispose();
+    providers?.hover.dispose();
+    providers?.diagnostics.dispose();
+    matcher.compile(getConfig().patterns);
+    const diagnostics = new DiagnosticsManager(matcher, store);
+    providers = {
+      completion: registerCompletion(matcher, store),
+      hover: registerHover(matcher, store),
+      diagnostics,
+    };
+    diagnostics.refreshAll();
+  };
+
+  setupProviders();
+  store.reload();
+
+  context.subscriptions.push(
+    store,
+    onDidChangeConfig(() => {
+      setupProviders();
+      store.reload();
+    }),
+    vscode.commands.registerCommand('unreal-localization.reload', () => {
+      store.reload();
+      void vscode.window.showInformationMessage('Unreal Localization: locres reloaded.');
+    }),
+    {
+      dispose() {
+        providers?.completion.dispose();
+        providers?.hover.dispose();
+        providers?.diagnostics.dispose();
+      },
+    },
+  );
+}
+
+export function deactivate(): void {
+  // disposables released via context.subscriptions
 }

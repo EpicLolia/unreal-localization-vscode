@@ -9,15 +9,86 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "unreal-localization.helloWorld",
-        "title": "Hello World"
+        "command": "unreal-localization.reload",
+        "title": "Unreal Localization: Reload"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Unreal Localization",
+      "properties": {
+        "unreal-localization.defaultCulture": {
+          "type": "string",
+          "default": "en",
+          "description": "Culture used as the data source (folder name under <root>/<target>)."
+        },
+        "unreal-localization.root": {
+          "type": "string",
+          "default": "Content/Localization",
+          "description": "Localization root, relative to each workspace folder, or an absolute path."
+        },
+        "unreal-localization.target": {
+          "type": "string",
+          "default": "Game",
+          "description": "Localization target name (folder under <root>; the .locres file is <target>.locres)."
+        },
+        "unreal-localization.patterns": {
+          "type": "array",
+          "default": [
+            {
+              "name": "GetText(ns, key)",
+              "files": [
+                "**/*.{ts,js,cpp,h}"
+              ],
+              "regex": "GetText\\(\\s*\"(?<ns>[^\"]*)\"\\s*,\\s*\"(?<key>[^\"]*)\"\\s*\\)"
+            }
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "files",
+              "regex"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Display name shown in warnings and logs."
+              },
+              "files": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Glob patterns this rule applies to."
+              },
+              "regex": {
+                "type": "string",
+                "markdownDescription": "Regex with named groups `ns` and `key`. Use `[^\"]*` (allowing empty content) so completion fires before the literal is closed."
+              }
+            }
+          },
+          "description": "Patterns recognised as localization calls."
+        },
+        "unreal-localization.diagnosticsSeverity": {
+          "type": "string",
+          "enum": [
+            "hint",
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "information",
+          "description": "Severity for missing namespace/key diagnostics."
+        }
+      }
+    }
   },
   "scripts": {
     "check": "tsc --noEmit -p tsconfig.json",
