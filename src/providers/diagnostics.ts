@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { getConfig } from '../config';
 import { LocresStore } from '../store';
 import { PatternMatcher } from '../matcher';
+import { log } from '../log';
 
 export class DiagnosticsManager implements vscode.Disposable {
   private readonly collection = vscode.languages.createDiagnosticCollection('unreal-localization');
@@ -11,8 +12,9 @@ export class DiagnosticsManager implements vscode.Disposable {
     const refresh = (doc: vscode.TextDocument) => {
       if (doc.uri.scheme !== 'file') return;
       const severity = getConfig().diagnosticsSeverity;
+      const matches = matcher.findAll(doc);
       const diagnostics: vscode.Diagnostic[] = [];
-      for (const m of matcher.findAll(doc)) {
+      for (const m of matches) {
         if (!store.hasNamespace(m.ns)) {
           diagnostics.push(new vscode.Diagnostic(m.nsRange, `Namespace '${m.ns}' not found.`, severity));
         } else if (!store.hasKey(m.ns, m.key)) {
@@ -20,6 +22,9 @@ export class DiagnosticsManager implements vscode.Disposable {
         }
       }
       this.collection.set(doc.uri, diagnostics);
+      if (matches.length > 0) {
+        log.trace(`refresh ${doc.uri.fsPath}: ${matches.length} matches, ${diagnostics.length} issues`);
+      }
     };
 
     this.subs = [

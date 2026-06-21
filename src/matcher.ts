@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { PatternConfig } from './config';
+import { log } from './log';
 
 export interface Match {
   ns: string;
@@ -24,19 +25,22 @@ export class PatternMatcher {
       try {
         regex = new RegExp(p.regex, 'gd');
       } catch (err) {
-        void vscode.window.showWarningMessage(`[unreal-localization] Pattern "${p.name}" has invalid regex: ${(err as Error).message}`);
+        const msg = `Pattern "${p.name}" has invalid regex: ${(err as Error).message}`;
+        log.warn(msg);
+        void vscode.window.showWarningMessage(`[unreal-localization] ${msg}`);
         continue;
       }
       if (!regex.source.includes('?<ns>') || !regex.source.includes('?<key>')) {
-        void vscode.window.showWarningMessage(
-          `[unreal-localization] Pattern "${p.name}" must define both (?<ns>...) and (?<key>...) named groups; skipped.`,
-        );
+        const msg = `Pattern "${p.name}" must define both (?<ns>...) and (?<key>...) named groups; skipped.`;
+        log.warn(msg);
+        void vscode.window.showWarningMessage(`[unreal-localization] ${msg}`);
         continue;
       }
       const selector = (p.files ?? []).map((g) => ({ scheme: 'file', pattern: g }));
       next.push({ regex, selector });
     }
     this.patterns = next;
+    log.info(`patterns set: ${next.length} active`);
   }
 
   findAll(doc: vscode.TextDocument): Match[] {

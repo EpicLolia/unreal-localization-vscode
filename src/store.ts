@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getConfig, ResolvedConfig } from './config';
 import { parseLocres, LocresTable } from './locres/parser';
+import { log } from './log';
 
 export class LocresStore implements vscode.Disposable {
   private table: LocresTable = {};
@@ -14,18 +15,23 @@ export class LocresStore implements vscode.Disposable {
     const cfg = getConfig();
     const bases = resolveBases(cfg);
     const rel = path.join(cfg.target, cfg.defaultCulture, `${cfg.target}.locres`);
+    log.info(`reload: culture=${cfg.defaultCulture}, target=${cfg.target}, bases=${JSON.stringify(bases)}`);
 
     const merged: LocresTable = {};
     for (const base of bases) {
       const filePath = path.join(base, rel);
-      if (!fs.existsSync(filePath)) continue;
+      if (!fs.existsSync(filePath)) {
+        log.info(`skip (not found): ${filePath}`);
+        continue;
+      }
       try {
-        const { table } = parseLocres(filePath);
+        const { table, namespaceCount, stringsCount } = parseLocres(filePath);
         for (const [ns, entries] of Object.entries(table)) {
           merged[ns] = { ...(merged[ns] ?? {}), ...entries };
         }
+        log.info(`loaded: ${filePath} (${namespaceCount} namespaces, ${stringsCount} strings)`);
       } catch (err) {
-        console.warn(`[unreal-localization] Failed to parse locres at ${filePath}:`, err);
+        log.error(`failed to parse ${filePath}: ${(err as Error).message}`);
       }
     }
     this.table = merged;
