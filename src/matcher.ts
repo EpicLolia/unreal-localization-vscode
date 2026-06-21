@@ -36,7 +36,7 @@ export class PatternMatcher {
         void vscode.window.showWarningMessage(`[unreal-localization] ${msg}`);
         continue;
       }
-      const selector = (p.files ?? []).map((g) => ({ scheme: 'file', pattern: g }));
+      const selector = (p.files ?? []).map((g) => ({ pattern: g }));
       next.push({ regex, selector });
     }
     this.patterns = next;
