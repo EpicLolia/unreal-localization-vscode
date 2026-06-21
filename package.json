@@ -103,13 +103,17 @@
     "watch:check": "tsc --noEmit --watch -p tsconfig.json",
     "build": "npm run check && node esbuild.js",
     "watch:build": "node esbuild.js --watch",
-    "package": "npm run check && node esbuild.js --production && npx vsce package"
+    "package": "npm run check && node esbuild.js --production && npx vsce package",
+    "test": "tsc -p tsconfig.json --outDir out && vscode-test"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^1.2.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
     "@types/vscode": "^1.103.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^3.0.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.1",
     "eslint": "^10.3.0",

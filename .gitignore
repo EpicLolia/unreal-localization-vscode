@@ -1,5 +1,8 @@
+out
 dist
 node_modules
+
+.vscode-test
 unreal-localization-*.vsix
 
 .claude/settings.local.json
