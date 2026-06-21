@@ -50,11 +50,11 @@
           "type": "array",
           "default": [
             {
-              "name": "GetText(ns, key)",
+              "name": "GetText",
               "files": [
                 "**/*.{ts,js,cpp,h}"
               ],
-              "regex": "GetText\\(\\s*\"(?<ns>[^\"]*)\"\\s*,\\s*\"(?<key>[^\"]*)\"\\s*\\)"
+              "template": "GetText('<ns>', '<key>')"
             }
           ],
           "items": {
@@ -62,7 +62,7 @@
             "required": [
               "name",
               "files",
-              "regex"
+              "template"
             ],
             "properties": {
               "name": {
@@ -76,9 +76,9 @@
                 },
                 "description": "Glob patterns this rule applies to."
               },
-              "regex": {
+              "template": {
                 "type": "string",
-                "markdownDescription": "Regex with named groups `ns` and `key`. Use `[^\"]*` (allowing empty content) so completion fires before the literal is closed."
+                "markdownDescription": "Call template with `<ns>` and `<key>` placeholders, e.g. `GetText('<ns>', '<key>')`. Quotes in the template match either `'` or `\"`, and whitespace is flexible."
               }
             }
           },

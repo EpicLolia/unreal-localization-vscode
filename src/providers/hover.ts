@@ -9,7 +9,7 @@ export function registerHover(matcher: PatternMatcher, store: LocresStore): vsco
     {
       provideHover(doc, pos) {
         const hit = matcher.findAtPosition(doc, pos);
-        if (!hit || !store.hasKey(hit.match.ns, hit.match.key)) return undefined;
+        if (!hit || !hit.match.complete || !store.hasKey(hit.match.ns, hit.match.key)) return undefined;
         const { ns, key } = hit.match;
         const value = store.getTranslation(ns, key) ?? '';
         const md = new vscode.MarkdownString()

@@ -5,7 +5,7 @@ const SECTION = 'unreal-localization';
 export interface PatternConfig {
   name: string;
   files: string[];
-  regex: string;
+  template: string;
 }
 
 export interface ResolvedConfig {

@@ -15,10 +15,11 @@ export class DiagnosticsManager implements vscode.Disposable {
       const matches = matcher.findAll(doc);
       const diagnostics: vscode.Diagnostic[] = [];
       for (const m of matches) {
+        if (!m.complete) continue;
         if (!store.hasNamespace(m.ns)) {
           diagnostics.push(new vscode.Diagnostic(m.nsRange, `Namespace '${m.ns}' not found.`, severity));
         } else if (!store.hasKey(m.ns, m.key)) {
-          diagnostics.push(new vscode.Diagnostic(m.keyRange, `Key '${m.key}' not found in namespace '${m.ns}'.`, severity));
+          diagnostics.push(new vscode.Diagnostic(m.keyRange ?? m.fullRange, `Key '${m.key}' not found in namespace '${m.ns}'.`, severity));
         }
       }
       this.collection.set(doc.uri, diagnostics);
