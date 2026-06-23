@@ -26,6 +26,10 @@
       {
         "command": "unreal-localization.reload",
         "title": "Unreal Localization: Reload"
+      },
+      {
+        "command": "unreal-localization.search",
+        "title": "Unreal Localization: Search Translations"
       }
     ],
     "configuration": {

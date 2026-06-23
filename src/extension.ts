@@ -5,6 +5,7 @@ import { PatternMatcher } from './matcher';
 import { registerCompletion } from './providers/completion';
 import { registerHover } from './providers/hover';
 import { DiagnosticsManager } from './providers/diagnostics';
+import { registerSearch } from './providers/search';
 import { channel, log } from './log';
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -28,6 +29,7 @@ export function activate(context: vscode.ExtensionContext): void {
     registerCompletion(matcher, store),
     registerHover(matcher, store),
     new DiagnosticsManager(matcher, store),
+    registerSearch(store),
     vscode.commands.registerCommand('unreal-localization.reload', () => {
       log.info('manual reload');
       store.reload();

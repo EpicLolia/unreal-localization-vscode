@@ -69,6 +69,14 @@ export class LocresStore implements vscode.Disposable {
     return Object.keys(this.table[ns] ?? {});
   }
 
+  *entries(): Iterable<{ ns: string; key: string; value: string }> {
+    for (const [ns, kv] of Object.entries(this.table)) {
+      for (const [key, value] of Object.entries(kv)) {
+        yield { ns, key, value };
+      }
+    }
+  }
+
   dispose(): void {
     this.disposeWatchers();
     this.emitter.dispose();
