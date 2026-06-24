@@ -6,7 +6,7 @@ import { registerCompletion } from './providers/completion';
 import { registerHover } from './providers/hover';
 import { DiagnosticsManager } from './providers/diagnostics';
 import { registerSearch } from './providers/search';
-import { channel, log } from './common/log';
+import { log } from './common/misc';
 
 export function activate(context: vscode.ExtensionContext): void {
   log.info('extension activated');
@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext): void {
   };
 
   context.subscriptions.push(
-    channel,
+    log,
     store,
     onDidChangeConfig(() => {
       log.info('config changed');

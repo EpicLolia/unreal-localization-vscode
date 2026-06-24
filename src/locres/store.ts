@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getConfig, ResolvedConfig } from '../common/config';
 import { parseLocres, LocresTable } from './parser';
-import { log } from '../common/log';
+import { log } from '../common/misc';
 
 export class LocresStore implements vscode.Disposable {
   private table: LocresTable = {};

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { getConfig } from '../common/config';
 import { LocresStore } from '../locres/store';
 import { PatternMatcher } from '../match/matcher';
-import { log } from '../common/log';
+import { log } from '../common/misc';
 
 export class DiagnosticsManager implements vscode.Disposable {
   private readonly collection = vscode.languages.createDiagnosticCollection('unreal-localization');
