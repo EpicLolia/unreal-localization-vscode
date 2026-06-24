@@ -1,18 +1,32 @@
 {
   "name": "unreal-localization",
   "displayName": "Unreal Localization for VS Code",
-  "description": "Unreal Localization for VS Code",
+  "description": "Inspect Unreal Engine .locres files inside VS Code: hover translations, autocomplete namespaces/keys, and flag missing entries in your code.",
   "version": "0.0.1",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.103.0"
   },
   "categories": [
+    "Linters",
     "Other"
+  ],
+  "keywords": [
+    "unreal",
+    "unreal engine",
+    "localization",
+    "locres",
+    "i18n"
   ],
   "publisher": "loiafeng",
   "repository": {
-    "url": "https://github.com/EpicLolia/unreal-localization-vscode"
+    "type": "git",
+    "url": "https://github.com/EpicLolia/unreal-localization-vscode.git"
   },
+  "bugs": {
+    "url": "https://github.com/EpicLolia/unreal-localization-vscode/issues"
+  },
+  "homepage": "https://github.com/EpicLolia/unreal-localization-vscode#readme",
   "files": [
     "dist/extension.js",
     "LICENSE"
