@@ -37,42 +37,36 @@
       "properties": {
         "unreal-localization.defaultCulture": {
           "type": "string",
-          "default": "en",
-          "description": "Culture used as the data source (folder name under <root>/<target>)."
+          "default": "zh-Hans",
+          "description": "Culture used as the data source (folder name under each path)."
         },
-        "unreal-localization.root": {
-          "type": "string",
-          "default": "Content/Localization",
-          "description": "Localization root, relative to each workspace folder, or an absolute path."
-        },
-        "unreal-localization.target": {
-          "type": "string",
-          "default": "Game",
-          "description": "Localization target name (folder under <root>; the .locres file is <target>.locres)."
+        "unreal-localization.paths": {
+          "type": "array",
+          "default": [
+            "Content/Localization/Game"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Localization target paths, relative to each workspace folder, or absolute. The plugin loads every .locres under <path>/<defaultCulture>/."
         },
         "unreal-localization.patterns": {
           "type": "array",
           "default": [
             {
-              "name": "GetText",
               "files": [
-                "**/*.{ts,js,cpp,h}"
+                "**/*.{h,cpp}"
               ],
-              "template": "GetText('<ns>', '<key>')"
+              "template": "NSLOCTEXT('<ns>', '<key>')"
             }
           ],
           "items": {
             "type": "object",
             "required": [
-              "name",
               "files",
               "template"
             ],
             "properties": {
-              "name": {
-                "type": "string",
-                "description": "Display name shown in warnings and logs."
-              },
               "files": {
                 "type": "array",
                 "items": {
@@ -82,7 +76,7 @@
               },
               "template": {
                 "type": "string",
-                "markdownDescription": "Call template with `<ns>` and `<key>` placeholders, e.g. `GetText('<ns>', '<key>')`. Quotes in the template match either `'` or `\"`, and whitespace is flexible."
+                "markdownDescription": "Call template with `<ns>` and `<key>` placeholders, e.g. `NSLOCTEXT('<ns>', '<key>')`. Quotes in the template match either `'` or `\"`, and whitespace is flexible."
               }
             }
           },

@@ -16,7 +16,7 @@ async function openDoc(content: string, ext: '.ts' | '.cpp' = '.ts'): Promise<vs
 
 function makeMatcher(template: string = TEMPLATE, files: string[] = ['**/*.ts']): PatternMatcher {
   const m = new PatternMatcher();
-  m.setPatterns([{ name: 'GetText', files, template }]);
+  m.setPatterns([{ files, template }]);
   return m;
 }
 
@@ -49,14 +49,14 @@ suite('PatternMatcher.findAll', () => {
 
   test('skips template missing <ns>', async () => {
     const matcher = new PatternMatcher();
-    matcher.setPatterns([{ name: 'bad', files: ['**/*.ts'], template: "GetText('<key>')" }]);
+    matcher.setPatterns([{ files: ['**/*.ts'], template: "GetText('<key>')" }]);
     const doc = await openDoc(`GetText('Finish')`);
     assert.deepStrictEqual(matcher.findAll(doc), []);
   });
 
   test('skips template missing comma between placeholders', async () => {
     const matcher = new PatternMatcher();
-    matcher.setPatterns([{ name: 'bad', files: ['**/*.ts'], template: "GetText('<ns>' '<key>')" }]);
+    matcher.setPatterns([{ files: ['**/*.ts'], template: "GetText('<ns>' '<key>')" }]);
     const doc = await openDoc(`GetText('UI' 'Finish')`);
     assert.deepStrictEqual(matcher.findAll(doc), []);
   });

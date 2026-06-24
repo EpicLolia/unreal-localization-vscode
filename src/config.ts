@@ -3,15 +3,13 @@ import * as vscode from 'vscode';
 const SECTION = 'unreal-localization';
 
 export interface PatternConfig {
-  name: string;
   files: string[];
   template: string;
 }
 
 export interface ResolvedConfig {
   defaultCulture: string;
-  root: string;
-  target: string;
+  paths: string[];
   patterns: PatternConfig[];
   diagnosticsSeverity: vscode.DiagnosticSeverity;
 }
@@ -35,8 +33,7 @@ export function getConfig(): ResolvedConfig {
   const c = vscode.workspace.getConfiguration(SECTION);
   return {
     defaultCulture: c.get<string>('defaultCulture', 'en'),
-    root: c.get<string>('root', 'Content/Localization'),
-    target: c.get<string>('target', 'Game'),
+    paths: c.get<string[]>('paths', ['Content/Localization/Game']),
     patterns: c.get<PatternConfig[]>('patterns', []),
     diagnosticsSeverity: mapSeverity(c.get<string>('diagnosticsSeverity')),
   };

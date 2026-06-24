@@ -14,31 +14,41 @@ export class LocresStore implements vscode.Disposable {
   reload(): void {
     const cfg = getConfig();
     const bases = resolveBases(cfg);
-    const rel = path.join(cfg.target, cfg.defaultCulture, `${cfg.target}.locres`);
-    log.info(`reload: culture=${cfg.defaultCulture}, target=${cfg.target}, bases=${JSON.stringify(bases)}`);
+    log.info(`reload: culture=${cfg.defaultCulture}, bases=${JSON.stringify(bases)}`);
 
     const merged: LocresTable = {};
     for (const base of bases) {
-      const filePath = path.join(base, rel);
-      if (!fs.existsSync(filePath)) {
-        log.info(`skip (not found): ${filePath}`);
+      const cultureDir = path.join(base, cfg.defaultCulture);
+      let entries: fs.Dirent[];
+      try {
+        entries = fs.readdirSync(cultureDir, { withFileTypes: true });
+      } catch (err) {
+        log.info(`skip (not readable): ${cultureDir} (${(err as Error).message})`);
         continue;
       }
-      try {
-        const { table, namespaceCount, stringsCount } = parseLocres(filePath);
-        for (const [ns, entries] of Object.entries(table)) {
-          merged[ns] = { ...(merged[ns] ?? {}), ...entries };
+      const files = entries.filter((e) => e.isFile() && e.name.toLowerCase().endsWith('.locres')).map((e) => path.join(cultureDir, e.name));
+      if (files.length === 0) {
+        log.info(`skip (no .locres): ${cultureDir}`);
+        continue;
+      }
+      for (const filePath of files) {
+        try {
+          const { table, namespaceCount, stringsCount } = parseLocres(filePath);
+          for (const [ns, kv] of Object.entries(table)) {
+            merged[ns] = { ...(merged[ns] ?? {}), ...kv };
+          }
+          log.info(`loaded: ${filePath} (${namespaceCount} namespaces, ${stringsCount} strings)`);
+        } catch (err) {
+          log.error(`failed to parse ${filePath}: ${(err as Error).message}`);
         }
-        log.info(`loaded: ${filePath} (${namespaceCount} namespaces, ${stringsCount} strings)`);
-      } catch (err) {
-        log.error(`failed to parse ${filePath}: ${(err as Error).message}`);
       }
     }
     this.table = merged;
 
     this.disposeWatchers();
     for (const base of bases) {
-      const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(vscode.Uri.file(base), rel));
+      const pattern = new vscode.RelativePattern(vscode.Uri.file(base), `${cfg.defaultCulture}/*.locres`);
+      const watcher = vscode.workspace.createFileSystemWatcher(pattern);
       const reload = () => this.reload();
       watcher.onDidChange(reload);
       watcher.onDidCreate(reload);
@@ -89,6 +99,14 @@ export class LocresStore implements vscode.Disposable {
 }
 
 function resolveBases(cfg: ResolvedConfig): string[] {
-  if (path.isAbsolute(cfg.root)) return [cfg.root];
-  return (vscode.workspace.workspaceFolders ?? []).map((f) => path.join(f.uri.fsPath, cfg.root));
+  const folders = vscode.workspace.workspaceFolders ?? [];
+  const out: string[] = [];
+  for (const p of cfg.paths) {
+    if (path.isAbsolute(p)) {
+      out.push(p);
+    } else {
+      for (const f of folders) out.push(path.join(f.uri.fsPath, p));
+    }
+  }
+  return out;
 }

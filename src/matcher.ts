@@ -27,7 +27,7 @@ export class PatternMatcher {
       try {
         regex = compileTemplate(p.template);
       } catch (err) {
-        const msg = `Pattern "${p.name}" template invalid: ${(err as Error).message}`;
+        const msg = `Pattern template invalid (${p.template}): ${(err as Error).message}`;
         log.warn(msg);
         void vscode.window.showWarningMessage(`[unreal-localization] ${msg}`);
         continue;
