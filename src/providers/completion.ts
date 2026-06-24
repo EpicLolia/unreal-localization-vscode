@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { LocresStore } from '../store';
-import { PatternMatcher } from '../matcher';
+import { LocresStore } from '../locres/store';
+import { PatternMatcher } from '../match/matcher';
 
 export function registerCompletion(matcher: PatternMatcher, store: LocresStore): vscode.Disposable {
   const provider: vscode.CompletionItemProvider = {

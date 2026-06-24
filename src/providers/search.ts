@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { LocresStore } from '../store';
+import { LocresStore } from '../locres/store';
 
 interface Item extends vscode.QuickPickItem {
   ns: string;

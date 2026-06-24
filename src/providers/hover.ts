@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { getConfig } from '../config';
-import { LocresStore } from '../store';
-import { PatternMatcher } from '../matcher';
+import { getConfig } from '../common/config';
+import { LocresStore } from '../locres/store';
+import { PatternMatcher } from '../match/matcher';
 
 export function registerHover(matcher: PatternMatcher, store: LocresStore): vscode.Disposable {
   return vscode.languages.registerHoverProvider(

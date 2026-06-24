@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
-import { getConfig, onDidChangeConfig } from './config';
-import { LocresStore } from './store';
-import { PatternMatcher } from './matcher';
+import { getConfig, onDidChangeConfig } from './common/config';
+import { LocresStore } from './locres/store';
+import { PatternMatcher } from './match/matcher';
 import { registerCompletion } from './providers/completion';
 import { registerHover } from './providers/hover';
 import { DiagnosticsManager } from './providers/diagnostics';
 import { registerSearch } from './providers/search';
-import { channel, log } from './log';
+import { channel, log } from './common/log';
 
 export function activate(context: vscode.ExtensionContext): void {
   log.info('extension activated');

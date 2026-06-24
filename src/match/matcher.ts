@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { PatternConfig } from './config';
+import { PatternConfig } from '../common/config';
 import { compileTemplate } from './template';
-import { log } from './log';
+import { log } from '../common/log';
 
 export interface Match {
   ns: string;

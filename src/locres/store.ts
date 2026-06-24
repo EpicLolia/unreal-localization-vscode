@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { getConfig, ResolvedConfig } from './config';
-import { parseLocres, LocresTable } from './locres/parser';
-import { log } from './log';
+import { getConfig, ResolvedConfig } from '../common/config';
+import { parseLocres, LocresTable } from './parser';
+import { log } from '../common/log';
 
 export class LocresStore implements vscode.Disposable {
   private table: LocresTable = {};

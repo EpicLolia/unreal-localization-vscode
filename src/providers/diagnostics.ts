@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { getConfig } from '../config';
-import { LocresStore } from '../store';
-import { PatternMatcher } from '../matcher';
-import { log } from '../log';
+import { getConfig } from '../common/config';
+import { LocresStore } from '../locres/store';
+import { PatternMatcher } from '../match/matcher';
+import { log } from '../common/log';
 
 export class DiagnosticsManager implements vscode.Disposable {
   private readonly collection = vscode.languages.createDiagnosticCollection('unreal-localization');

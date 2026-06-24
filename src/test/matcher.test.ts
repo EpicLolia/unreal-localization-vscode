@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { PatternMatcher } from '../matcher';
+import { PatternMatcher } from '../match/matcher';
 
 const TEMPLATE = "GetText('<ns>', '<key>')";
 
