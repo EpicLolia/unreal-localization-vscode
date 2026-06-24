@@ -2,7 +2,12 @@ import * as vscode from 'vscode';
 
 export const log = vscode.window.createOutputChannel('Unreal Localization', { log: true });
 
-type AnyMethod = (this: unknown, ...args: unknown[]) => unknown;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyMethod = (this: any, ...args: any[]) => any;
+
+function isPromiseLike(value: unknown): value is Promise<unknown> {
+  return value instanceof Promise;
+}
 
 export function timed<T extends AnyMethod>(originalMethod: T, context: ClassMethodDecoratorContext): T {
   const name = String(context.name);
@@ -20,7 +25,7 @@ export function timed<T extends AnyMethod>(originalMethod: T, context: ClassMeth
       finish();
       throw err;
     }
-    if (result instanceof Promise) {
+    if (isPromiseLike(result)) {
       return result.finally(finish) as ReturnType<T>;
     }
     finish();

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { PatternConfig } from '../common/config';
 import { compileTemplate } from './template';
-import { log } from '../common/misc';
+import { log, timed } from '../common/misc';
 
 export interface Match {
   ns: string;
@@ -20,6 +20,7 @@ interface CompiledPattern {
 export class PatternMatcher {
   private patterns: CompiledPattern[] = [];
 
+  @timed
   setPatterns(configs: PatternConfig[]): void {
     const next: CompiledPattern[] = [];
     for (const p of configs) {
@@ -39,6 +40,7 @@ export class PatternMatcher {
     log.info(`patterns set: ${next.length} active`);
   }
 
+  @timed
   findAll(doc: vscode.TextDocument): Match[] {
     const text = doc.getText();
     const out: Match[] = [];

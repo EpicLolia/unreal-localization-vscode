@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getConfig, ResolvedConfig } from '../common/config';
 import { parseLocres, LocresTable } from './parser';
-import { log } from '../common/misc';
+import { log, timed } from '../common/misc';
 
 export class LocresStore implements vscode.Disposable {
   private table: LocresTable = {};
@@ -11,6 +11,7 @@ export class LocresStore implements vscode.Disposable {
   private readonly emitter = new vscode.EventEmitter<void>();
   public readonly onDidUpdate = this.emitter.event;
 
+  @timed
   reload(): void {
     const cfg = getConfig();
     const bases = resolveBases(cfg);
