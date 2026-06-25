@@ -4,19 +4,19 @@
 
 ## 主要功能
 
-### 命名空间与 Key 自动补全 (Completion)
+### 1. 命名空间与 Key 自动补全 (Completion)
 
 在引号内输入时，插件会依据光标所在位置，列出全部可用的命名空间，或当前命名空间下的 Key 列表，并附带译文预览以辅助选择。
 
 ![completion](media/completion.png)
 
-### 悬浮翻译预览 (Hover)
+### 2. 悬浮翻译预览 (Hover)
 
 将光标停留于本地化调用之上，编辑器即可弹出当前 `defaultCulture` 所对应的译文，无需在多个文件之间切换查阅。
 
 ![hover](media/hover.png)
 
-### 缺失项静态校验 (Diagnostics)
+### 3. 缺失项静态校验 (Diagnostics)
 
 插件会扫描代码中的本地化调用，对在 `.locres` 中无法解析的命名空间或 Key 进行高亮提示，便于在编码阶段及早发现遗漏，避免问题遗留至运行期。诊断的严重等级可按需配置。
 
@@ -24,7 +24,7 @@
 
 ![diagnostics_2](media/diagnostics_2.png)
 
-### 翻译条目检索 (Search Translations)
+### 4. 翻译条目检索 (Search Translations)
 
 通过命令面板执行 `Unreal Localization: Search Translations`，可按命名空间、Key 或译文进行模糊检索。选中目标条目后，插件会将 `namespace, key` 写入剪贴板，可直接粘贴使用。
 
