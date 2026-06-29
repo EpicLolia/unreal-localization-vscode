@@ -2,10 +2,10 @@
   "name": "unreal-localization",
   "displayName": "Unreal Localization for VS Code",
   "description": "Inspect Unreal Engine .locres files inside VS Code: hover translations, autocomplete namespaces/keys, and flag missing entries in your code.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.103.0"
+    "vscode": "^1.102.0"
   },
   "categories": [
     "Linters",
@@ -123,7 +123,7 @@
     "@eslint/json": "^1.2.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
-    "@types/vscode": "^1.103.0",
+    "@types/vscode": "^1.102.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^3.0.0",
     "@vscode/vsce": "^3.9.2",
